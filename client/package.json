@@ -7,6 +7,9 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "engines": {
+    "node": "10.15.1"
+  },
   "dependencies": {
     "@babylonjs/core": "^4.0.0-alpha.18",
     "@babylonjs/loaders": "^4.0.0-alpha.18",
