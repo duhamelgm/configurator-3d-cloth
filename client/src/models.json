@@ -1,0 +1,14 @@
+{
+  "shoes": {
+    "name": "Shoes",
+    "path": "/assets/models/shoe/",
+    "file": "shoe.gltf",
+    "colors": ["#111111", "#918c65", "#362828", "#7a4c45", "#a67a69", "#deccad"]
+  },
+  "valeria_bag": {
+    "name": "Valeria Bag",
+    "path": "/assets/models/valeria_bag/",
+    "file": "valeria_bag.gltf",
+    "colors": ["#111111", "#918c65", "#362828", "#7a4c45", "#a67a69", "#deccad"]
+  }
+}
