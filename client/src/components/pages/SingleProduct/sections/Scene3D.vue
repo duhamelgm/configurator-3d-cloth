@@ -13,7 +13,7 @@ export default {
       return this.$refs.canvas;
     }
   },
-  props: { model: Object, color: String },
+  props: { model: Object, selectedMaterial: String },
   mounted() {
     // Load the 3D engine
     this.canvas.style.width = "100%";
@@ -46,6 +46,7 @@ export default {
     createScene() {
       // Create a basic BJS Scene object
       this.scene = new BABYLON.Scene(this.engine);
+      this.scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1);
 
       const camera = new BABYLON.ArcRotateCamera(
         "camera2",
@@ -55,105 +56,71 @@ export default {
         new BABYLON.Vector3.Zero(),
         this.scene
       );
-      camera.wheelPrecision = 100;
+      camera.wheelPrecision = 200;
       camera.minZ = 0.01;
-      camera.setPosition(new BABYLON.Vector3(0, 0.4, 0.4));
+      camera.setPosition(new BABYLON.Vector3(0.5, 0.3, 0));
+      camera.panningSensibility = 2500;
+      camera.panningInertia = 0.5;
+      camera.lowerRadiusLimit = 0.1;
+      camera.upperRadiusLimit = 2;
+      camera.useAutoRotationBehavior = true;
+      camera.idleRotationSpeed = 15;
 
-      //camera.panningSensibility = 4000;
       // Target the camera to scene origin
       camera.attachControl(this.canvas, false);
-      // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
-      var light = new BABYLON.HemisphericLight(
-        "light1",
-        new BABYLON.Vector3(0, 1, 0),
-        this.scene
-      );
 
       BABYLON.SceneLoader.Append(
         this.model.path,
         this.model.file,
         this.scene,
         scene => {
-          // do something with the scene
-          this.modelMaterials = {};
+          this.mesh = this.scene.meshes.filter(
+            mesh => mesh.name === this.model.id
+          )[0];
 
-          this.scene.materials.forEach(el => {
-            switch (el.id) {
-              case "dynamic_light":
-                this.modelMaterials["dynamic_light"] = el;
-                break;
-
-              case "dynamic":
-                this.modelMaterials["dynamic"] = el;
-                break;
-
-              case "default":
-                el.albedoColor = new BABYLON.Color3(0.01, 0.01, 0.01);
-            }
-          });
+          this.loadHdr();
+        },
+        evt => {
+          if (evt.lengthComputable) {
+            this.engine.loadingUIText =
+              "Loading, please wait..." +
+              ((evt.loaded * 100) / evt.total).toFixed() +
+              "%";
+          } else {
+            let dlCount = evt.loaded / (1024 * 1024);
+            this.engine.loadingUIText =
+              "Loading, please wait..." +
+              Math.floor(dlCount * 100.0) / 100.0 +
+              " MB already loaded.";
+          }
         }
       );
+    },
+    loadHdr: function() {
+      const hdr = new BABYLON.HDRCubeTexture(
+        "/assets/hdr/hall.hdr",
+        this.scene,
+        512
+      );
+
+      this.scene.materials.forEach(mat => {
+        mat.reflectionTexture = hdr;
+      });
     }
   },
   watch: {
-    color(newVal, oldVal) {
-      if(!this.modelMaterials) return;
-
-      const c = hexToRgb(newVal);
-
-      const r = normalize(c.r, 255, 0);
-      const g = normalize(c.g, 255, 0);
-      const b = normalize(c.b, 255, 0);
-
-      this.modelMaterials["dynamic"].albedoColor = new BABYLON.Color3(r, g, b);
-
-      const lightC = hexToRgb(shadeColor(newVal, -40));
-
-      const lr = normalize(lightC.r, 255, 0);
-      const lg = normalize(lightC.g, 255, 0);
-      const lb = normalize(lightC.b, 255, 0);
-
-      this.modelMaterials["dynamic_light"].albedoColor = new BABYLON.Color3(
-        lr,
-        lg,
-        lb
-      );
+    selectedMaterial(newVal, oldVal) {
+      const material = this.scene.materials.filter(
+        mat => mat.name === this.selectedMaterial
+      )[0];
+      this.mesh.material = material;
     }
   }
 };
-
-function hexToRgb(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-      }
-    : null;
-}
-
-function normalize(val, max, min) {
-  return (val - min) / (max - min);
-}
-
-function shadeColor(color, percent) {
-  var R = parseInt(color.substring(1, 3), 16);
-  var G = parseInt(color.substring(3, 5), 16);
-  var B = parseInt(color.substring(5, 7), 16);
-
-  R = parseInt((R * (100 + percent)) / 100);
-  G = parseInt((G * (100 + percent)) / 100);
-  B = parseInt((B * (100 + percent)) / 100);
-
-  R = R < 255 ? R : 255;
-  G = G < 255 ? G : 255;
-  B = B < 255 ? B : 255;
-
-  var RR = R.toString(16).length == 1 ? "0" + R.toString(16) : R.toString(16);
-  var GG = G.toString(16).length == 1 ? "0" + G.toString(16) : G.toString(16);
-  var BB = B.toString(16).length == 1 ? "0" + B.toString(16) : B.toString(16);
-
-  return "#" + RR + GG + BB;
-}
 </script>
+
+<style lang="scss">
+canvas:focus {
+  outline: none;
+}
+</style>

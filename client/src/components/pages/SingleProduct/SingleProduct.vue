@@ -1,15 +1,15 @@
 <template>
   <main class="container">
-    <Scene3D class="scene" :model="model" :color="selectedColor"/>
+    <Scene3D class="scene" :model="model" :selectedMaterial="selectedMaterial"/>
     <h2 class="title">{{model.name}}</h2>
     <div class="color-selector">
       <p>Choose your color:</p>
       <ul class="colors">
         <li
-          v-for="(color, key) in model.colors"
+          v-for="(color, key) in model.materials"
           :key="key"
           :style="`background: ${color}`"
-          @click="() => selectedColor = color"
+          @click="() => selectedMaterial = key"
         ></li>
       </ul>
     </div>
@@ -25,7 +25,7 @@ export default {
   name: "SingleProduct",
   data() {
     return {
-      selectedColor: null
+      selectedMaterial: null
     };
   },
   components: {

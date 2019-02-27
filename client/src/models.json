@@ -1,14 +1,24 @@
 {
   "shoes": {
+    "id": "shoes",
     "name": "Shoes",
     "path": "/assets/models/shoe/",
     "file": "shoe.gltf",
-    "colors": ["#111111", "#918c65", "#362828", "#7a4c45", "#a67a69", "#deccad"]
+    "materials": {
+      "boot_black": "#121212",
+      "boot_red": "#490A1B",
+      "boot_brown": "#8F6C4E"
+    }
   },
   "valeria_bag": {
+    "id": "valeria_bag",
     "name": "Valeria Bag",
     "path": "/assets/models/valeria_bag/",
     "file": "valeria_bag.gltf",
-    "colors": ["#111111", "#918c65", "#362828", "#7a4c45", "#a67a69", "#deccad"]
+    "materials": {
+      "valeria_black_leather": "#121212",
+      "valeria_violet_leather": "#491D4F",
+      "valeria_brown_leather": "#A16E4E"
+    }
   }
 }
