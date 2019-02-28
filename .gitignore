@@ -4,6 +4,7 @@ node_modules
 #client
 client/node_modules
 client/.gitignore
+client/dist
 
 # local env files
 .env.local
