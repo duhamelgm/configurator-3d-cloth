@@ -46,7 +46,7 @@ export default {
     createScene() {
       // Create a basic BJS Scene object
       this.scene = new BABYLON.Scene(this.engine);
-      this.scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+      this.scene.clearColor = new BABYLON.Color3(0.9, 0.9, 0.9);
 
       const camera = new BABYLON.ArcRotateCamera(
         "camera2",
@@ -79,6 +79,8 @@ export default {
           )[0];
 
           this.loadHdr();
+
+          scene.cameras[0].setPosition(new BABYLON.Vector3(-0.9, 0.6, 0.3));
         },
         evt => {
           if (evt.lengthComputable) {

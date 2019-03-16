@@ -5,7 +5,7 @@
     "path": "/assets/models/shoe/",
     "file": "shoe.gltf",
     "materials": {
-      "boot_black": "#121212",
+      "boot_black": "#2B2B2B",
       "boot_red": "#490A1B",
       "boot_brown": "#8F6C4E"
     }
@@ -16,7 +16,7 @@
     "path": "/assets/models/valeria_bag/",
     "file": "valeria_bag.gltf",
     "materials": {
-      "valeria_black_leather": "#121212",
+      "valeria_black_leather": "#2B2B2B",
       "valeria_violet_leather": "#491D4F",
       "valeria_brown_leather": "#A16E4E"
     }
